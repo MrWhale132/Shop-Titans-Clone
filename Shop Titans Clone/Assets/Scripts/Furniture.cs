@@ -16,7 +16,7 @@ public class Furniture : MoveableObject
 
     // Furnitures of the shop.
     static List<Furniture> furnitures = new List<Furniture>();
-    
+
     Item[] itemSlots;
 
     public static List<Furniture> Furnitures => furnitures;
@@ -53,7 +53,7 @@ public class Furniture : MoveableObject
 
         itemSlots[at] = item;
         item.transform.SetParent(itemParent);
-        item.transform.position = itemPlaces[at].position + Vector3.up * item.transform.localScale.y / 2;
+        item.SetUpDisplayPosition(itemPlaces[at].position, itemPlaces[at].rotation);
     }
 
     public void RemoveItem(Item item)

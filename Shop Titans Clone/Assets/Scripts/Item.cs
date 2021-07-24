@@ -16,12 +16,14 @@ public class Item : MonoBehaviour
     [SerializeField]
     Material[] recquiredMaterials;
     [SerializeField]
-    bool complexModel;
+    Vector3 preferedOffset;
+    [SerializeField]
+    Vector3 preferedRotOnFurn;
+    [SerializeField]
+    Renderer[] renderers;
 
-    Renderer rend;
     Color originalColor;
 
-    Renderer[] childrensRend;
 
     public Sprite Icon => icon;
     public string Name => itemName;
@@ -31,18 +33,13 @@ public class Item : MonoBehaviour
     public Material[] RecquiredMaterials => recquiredMaterials;
 
 
-    void Start()
+
+    public void SetUpDisplayPosition(Vector3 position, Quaternion rotation)
     {
-        if (complexModel)
-        {
-            childrensRend = GetComponentsInChildren<Renderer>();
-            originalColor = childrensRend[1].material.color;
-        }
-        else
-        {
-            rend = GetComponent<Renderer>();
-            originalColor = rend.material.color;
-        }
+        transform.position = position;
+        transform.rotation = rotation;
+        transform.Translate(preferedOffset, Space.Self);
+        transform.Rotate(preferedRotOnFurn, Space.Self);
     }
 
 
@@ -91,13 +88,9 @@ public class Item : MonoBehaviour
 
     void ChangeColor(Color newColor)
     {
-        if (complexModel)
+        foreach (var rend in renderers)
         {
-            foreach (var rend in childrensRend)
-            {
-                rend.material.color = newColor;
-            }
+            rend.material.color = newColor;
         }
-        else rend.material.color = newColor;
     }
 }

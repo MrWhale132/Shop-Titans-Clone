@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class CraftController : MonoBehaviour
 {
     static CraftController instance;
 
-    [SerializeField]
-    Item[] itemPrefabs;
+    List<Item> itemPrefabs = new List<Item>();
     [SerializeField]
     BPComponent componentPrefab;
     [SerializeField]
@@ -17,18 +18,21 @@ public class CraftController : MonoBehaviour
     CraftingItemCard craftingCardPrefab;
     [SerializeField]
     Transform cardHolder;
+    [SerializeField]
+    TreeNode itemPrefabTree;
 
 
     List<CraftingItemCard> craftQueue = new List<CraftingItemCard>();
 
     public static CraftController Instance => instance;
     public static BPComponent ComponentPrefab => instance.componentPrefab;
-    public Item[] ItemPrefabs => itemPrefabs;
+    public List<Item> ItemPrefabs => itemPrefabs;
 
 
     void Awake()
     {
         instance = this;
+        LoadAssets(itemPrefabTree);
     }
 
 
@@ -80,4 +84,20 @@ public class CraftController : MonoBehaviour
     }
 
 
+
+    void LoadAssets(TreeNode parent)
+    {
+        if (parent.IsLeaf)
+        {
+            itemPrefabs.AddRange(Resources.LoadAll<Item>(path.ToString() + parent.FileName));
+            return;
+        }
+        path.Append(parent.FileName);
+        foreach (TreeNode child in parent)
+        {
+            LoadAssets(child);
+        }
+        path.Remove(path.Length - parent.FileName.Length, parent.FileName.Length - 1);
+    }
+    StringBuilder path = new StringBuilder();
 }

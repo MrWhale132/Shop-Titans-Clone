@@ -231,7 +231,7 @@ public class NPC : MonoBehaviour, IPathUnit
             }
             else
             {
-                // FIXME: XD this will make no difference on the next Update
+                // FIXME: this will make no difference on the next Update
                 path = new Queue<Vector3>(PathFinder.FindPath(Position, path.ToArray()[path.Count - 1]));
                 if (path == null) Debug.LogError("the other dude is blocking the only way to the target");
             }

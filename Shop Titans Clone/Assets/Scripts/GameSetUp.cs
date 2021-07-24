@@ -5,13 +5,18 @@ using UnityEngine;
 public class GameSetUp : MonoBehaviour
 {
     [SerializeField]
+    GameObject overlayCanvas;
+    [SerializeField]
     GameObject[] startables;
     [SerializeField]
     TreeNode resourcesTree;
 
     void Start()
     {
+        overlayCanvas.SetActive(true);
+
         LoadAssets(resourcesTree);
+
         // Awake
         foreach (GameObject go in startables)
         {

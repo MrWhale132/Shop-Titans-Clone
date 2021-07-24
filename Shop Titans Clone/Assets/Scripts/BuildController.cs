@@ -1,43 +1,34 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class BuildController : MonoBehaviour
 {
     static BuildController instance;
 
-    [SerializeField]
-    Furniture[] furnitures;
+    List<Furniture> furniturePrefabs = new List<Furniture>();
     MoveableObject toBuildFurn;
     MoveableObject moveable;
     MouseController mouseC;
+    [SerializeField]
+    TreeNode furniturePrefabTree;
 
     public static BuildController Instance => instance;
     public MoveableObject ToBuildFurn { get => toBuildFurn; set => toBuildFurn = value; }
     public MoveableObject ToMoveFurn { get => moveable; set => moveable = value; }
-    public Furniture[] FurnPrefabs => furnitures;
+    public List<Furniture> FurnPrefabs => furniturePrefabs;
 
 
     void Awake()
     {
         instance = this;
+        LoadAssets(furniturePrefabTree);
     }
 
     void Start()
     {
         mouseC = MouseController.Instace;
-
-        Furniture forTest = Instantiate(furnitures[0], new Vector3(15.5f, 0, 5), Quaternion.identity);
-        toBuildFurn = forTest;
-        toBuildFurn.ValidatePosition();
-
-        System.Random r = new System.Random();
-        int length = r.Next(2, forTest.Capacity);
-        for (int i = 0; i < length; i++)
-        {
-            Item prefab = itemPrefabs[r.Next(0, itemPrefabs.Length)];
-            Item itemToAdd = Instantiate(prefab);
-            forTest.AddItem(itemToAdd);
-        }
     }
    
 
@@ -46,20 +37,9 @@ public class BuildController : MonoBehaviour
         toBuildFurn.ValidatePosition();
         GridController.SetActiveBuildGrid(false);
         mouseC.RemoveControl(MouseController.UsageMode.DragLeft, DragFurn);
-
-        Furniture forTest = toBuildFurn as Furniture;
-        System.Random r = new System.Random();
-        int length = r.Next(0, forTest.Capacity);
-        for (int i = 0; i < 6; i++)
-        {
-            Item prefab = itemPrefabs[r.Next(0, itemPrefabs.Length)];
-            Item itemToAdd = Instantiate(prefab);
-            forTest.AddItem(itemToAdd);
-        }
         toBuildFurn = null;
     }
 
-    public Item[] itemPrefabs;
 
     public void CancelConstruction()
     {
@@ -121,4 +101,22 @@ public class BuildController : MonoBehaviour
     // The coordinate of the point of the furniture which clicked by the user
     // The dragging difference is calculated from this coord
     Vector3Int draggingCoord;
+
+
+
+    void LoadAssets(TreeNode parent)
+    {
+        if (parent.IsLeaf)
+        {
+            furniturePrefabs.AddRange(Resources.LoadAll<Furniture>(path.ToString() + parent.FileName));
+            return;
+        }
+        path.Append(parent.FileName);
+        foreach (TreeNode child in parent)
+        {
+            LoadAssets(child);
+        }
+        path.Remove(path.Length - parent.FileName.Length, parent.FileName.Length - 1);
+    }
+    StringBuilder path = new StringBuilder();
 }

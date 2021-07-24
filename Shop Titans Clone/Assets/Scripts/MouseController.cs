@@ -55,8 +55,9 @@ public class MouseController : MonoBehaviour
 
     void Start()
     {
-        raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+        raycaster = GameObject.Find("OverlayCanvas").GetComponent<GraphicRaycaster>();
         results = new List<RaycastResult>();
+        dragPlane = new Plane(Vector3.up, Vector3.zero);
 
         Array usageValues = Enum.GetValues(typeof(UsageMode));
         usages = new List<Func<bool>>[usageValues.Length];
@@ -128,11 +129,7 @@ public class MouseController : MonoBehaviour
         pointerData.position = Input.mousePosition;
         results.Clear();
         raycaster.Raycast(pointerData, results);
-        if (results.Count > 0)
-        {
-            isPointerOver = true;
-        }
-        else isPointerOver = false;
+        isPointerOver = results.Count > 0;
     }
 
 
@@ -217,6 +214,7 @@ public class MouseController : MonoBehaviour
             Quaternion fixedRot = Quaternion.Euler(eulers);
             Camera.main.transform.rotation = fixedRot;
 
+            // checking for stopping threshold
             eulers = lookRot.eulerAngles;
             eulers.x = 50;
             fixedRot = Quaternion.Euler(eulers);
@@ -294,9 +292,9 @@ public class MouseController : MonoBehaviour
 
     void UpdateDragPlane()
     {
-        Vector3 groundIntersectPoint = GetGroundIntersectPoint();
-        Vector3 normal = (Camera.main.transform.position - groundIntersectPoint).normalized;
-        dragPlane.SetNormalAndPosition(Vector3.up, Vector3.zero);
+        //Vector3 groundIntersectPoint = GetGroundIntersectPoint();
+        //Vector3 normal = (Camera.main.transform.position - groundIntersectPoint).normalized;
+        //dragPlane.SetNormalAndPosition(normal, groundIntersectPoint);
     }
 
     void UpdateZoomPlane()
