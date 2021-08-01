@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using UnityEngine;
 
 public class Utilitys
 {
@@ -8,10 +9,5 @@ public class Utilitys
         //bad, shit, FIXIT:
         //  return a + (int)UnityEngine.Mathf.Repeat(value, b - a);
         return default;
-    }
-
-    public static void SwapWithLast(int index, IEnumerable collection)
-    {
-               
     }
 }

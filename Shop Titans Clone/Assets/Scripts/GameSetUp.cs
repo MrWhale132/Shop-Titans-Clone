@@ -31,7 +31,10 @@ public class GameSetUp : MonoBehaviour
         ShopInfoMenu.GoldAmount = 0;
     }
 
-
+    void OnDestroy()
+    {
+        PlayerStats.tokenSource.Cancel();
+    }
 
 
     void LoadAssets(TreeNode parent)

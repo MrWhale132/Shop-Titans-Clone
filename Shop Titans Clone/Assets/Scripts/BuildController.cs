@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BuildController : MonoBehaviour
 {
     static BuildController instance;
 
-    List<Furniture> furniturePrefabs = new List<Furniture>();
-    MoveableObject toBuildFurn;
-    MoveableObject moveable;
+    List<Fitment> fitmentprefabs = new List<Fitment>();
+    Fitment toBuildFitment;
+    Fitment toMoveFitment;
     MouseController mouseC;
     [SerializeField]
     TreeNode furniturePrefabTree;
 
     public static BuildController Instance => instance;
-    public MoveableObject ToBuildFurn { get => toBuildFurn; set => toBuildFurn = value; }
-    public MoveableObject ToMoveFurn { get => moveable; set => moveable = value; }
-    public List<Furniture> FurnPrefabs => furniturePrefabs;
+    public Fitment ToBuildFitment { get => toBuildFitment; set => toBuildFitment = value; }
+    public Fitment ToMoveFitment { get => toMoveFitment; set => toMoveFitment = value; }
+    public List<Fitment> FitmentPrefabs => fitmentprefabs;
 
 
     void Awake()
@@ -34,50 +33,52 @@ public class BuildController : MonoBehaviour
 
     public void BuildMoveable()
     {
-        toBuildFurn.ValidatePosition();
+        toBuildFitment.DoPaperWork();
+        toBuildFitment.ValidatePosition();
         GridController.SetActiveBuildGrid(false);
-        mouseC.RemoveControl(MouseController.UsageMode.DragLeft, DragFurn);
-        toBuildFurn = null;
+        mouseC.RemoveControl(MouseController.UsageMode.DragLeft, DragFitment);
+        toBuildFitment = null;
+        toMoveFitment?.ValidatePosition();
     }
 
 
     public void CancelConstruction()
     {
-        toBuildFurn.RemoveFromShop();
-        Destroy(toBuildFurn.gameObject);
+        toBuildFitment.RemoveFromShop();
+        Destroy(toBuildFitment.gameObject);
 
-        toBuildFurn = null;
-        moveable = null;
+        toBuildFitment = null;
+        toMoveFitment = null;
         GridController.SetActiveBuildGrid(false);
-        mouseC.RemoveControl(MouseController.UsageMode.DragLeft, DragFurn);
+        mouseC.RemoveControl(MouseController.UsageMode.DragLeft, DragFitment);
     }
 
 
-    // wether to override the camerapan or not
-    public bool DragFurn()
+    // bool: wether to override the camerapan or not
+    public bool DragFitment()
     {
         if (mouseC.LeftBtnDown && !mouseC.RightBtn && !mouseC.IsPointerOver)
         {
-            if (moveable != null)
+            if (toMoveFitment != null)
             {
-                moveable.ValidatePosition();
+                toMoveFitment.ValidatePosition();
             }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit info, 300f))
             {
-                MoveableObject furn = info.collider.gameObject.GetComponent<MoveableObject>();
+                Fitment furn = info.collider.gameObject.GetComponent<Fitment>();
                 if (furn != null)
                 {
-                    moveable = furn;
-                    moveable.ChangePosition(Vector3Int.zero);
+                    toMoveFitment = furn;
+                    toMoveFitment.ChangePosition(Vector3Int.zero);
                     groundedMousePos.Set(info.point.x, 0, info.point.z);
                     draggingCoord = Vector3Int.RoundToInt(groundedMousePos);
                     return true;
                 }
             }
-            moveable = null;
+            toMoveFitment = null;
         }
-        else if (mouseC.LeftBtn && moveable != null && !mouseC.RightBtn)
+        else if (mouseC.LeftBtn && toMoveFitment != null && !mouseC.RightBtn)
         {
             Vector3 dragVec = mouseC.GetDragVector();
             if (dragVec.x != 0 || dragVec.z != 0)
@@ -89,7 +90,7 @@ public class BuildController : MonoBehaviour
                 if (diff != Vector3Int.zero)
                 {
                     draggingCoord += diff;
-                    moveable.ChangePosition(diff);
+                    toMoveFitment.ChangePosition(diff);
                 }
             }
             return true;
@@ -108,7 +109,7 @@ public class BuildController : MonoBehaviour
     {
         if (parent.IsLeaf)
         {
-            furniturePrefabs.AddRange(Resources.LoadAll<Furniture>(path.ToString() + parent.FileName));
+            fitmentprefabs.AddRange(Resources.LoadAll<Fitment>(path.ToString() + parent.FileName));
             return;
         }
         path.Append(parent.FileName);

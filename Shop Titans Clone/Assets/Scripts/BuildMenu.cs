@@ -6,7 +6,7 @@ public class BuildMenu : MonoBehaviour, IStartable
     static BuildMenu instance;
 
     [SerializeField]
-    FurniturePortraitCard furnCardPrefab;
+    FitmentBlueprint furnCardPrefab;
     [SerializeField]
     Transform holder;
 
@@ -18,7 +18,7 @@ public class BuildMenu : MonoBehaviour, IStartable
     BuildController buildC;
 
     public static BuildMenu Instance => instance;
-    public FurniturePortraitCard FurniturePortraitCardPrefab => furnCardPrefab;
+    public FitmentBlueprint FurniturePortraitCardPrefab => furnCardPrefab;
     public Transform FurnCardsHolder => holder;
 
 
@@ -35,29 +35,30 @@ public class BuildMenu : MonoBehaviour, IStartable
         editUI = EditUI.Instance;
         constructionMenu = ConstructionMenu.Instance;
 
-        foreach (var furn in buildC.FurnPrefabs)
+        foreach (var furn in buildC.FitmentPrefabs)
         {
             var card = Instantiate(furnCardPrefab, holder);
             card.GetComponent<Button>().onClick.AddListener(() => FurnitureSelected(card));
-            card.SetFurniture(furn);
+            card.SetFitment(furn);
         }
 
         gameObject.SetActive(false);
     }
 
-    void FurnitureSelected(FurniturePortraitCard card)
+    void FurnitureSelected(FitmentBlueprint card)
     {
         animator.SetTrigger("Exit");
         GridController.SetActiveBuildGrid(true);
 
-        buildC.ToBuildFurn = Instantiate(card.Prefab, new Vector3(10.5f, 0, 5), Quaternion.identity);
-        buildC.ToMoveFurn = buildC.ToBuildFurn;
-        mouseC.AddControl(MouseController.UsageMode.DragLeft, buildC.DragFurn);
+        buildC.ToBuildFitment = Instantiate(card.Prefab, new Vector3(10, 0, 5), Quaternion.identity);
+        buildC.ToMoveFitment = buildC.ToBuildFitment;
+        buildC.ToBuildFitment.SetPosition(new Vector3Int(10, 0, 5));
+        mouseC.AddControl(MouseController.UsageMode.DragLeft, buildC.DragFitment);
 
         constructionMenu.Enter();
     }
 
-    
+
 
 
 

@@ -20,7 +20,8 @@ public class CraftController : MonoBehaviour
     Transform cardHolder;
     [SerializeField]
     TreeNode itemPrefabTree;
-
+    [SerializeField]
+    List<ResourceTypePropertys> resourcePropertys;
 
     List<CraftingItemCard> craftQueue = new List<CraftingItemCard>();
 
@@ -43,6 +44,19 @@ public class CraftController : MonoBehaviour
             MessageDisplayer.DisplayMessage("The crafting queue is full.");
             return;
         }
+        if (card.Item.RequiredResources.Any(resource =>
+                                 PlayerStats.IsResourceAchived(resource.ResourceType) == false ||
+                                 PlayerStats.GetResourceTotalQuantity(resource.ResourceType) < resource.Quantity))
+        {
+            MessageDisplayer.DisplayMessage("You do not have enough resources to craft this item.");
+            return;
+        }
+
+        foreach (var resouce in card.Item.RequiredResources)
+        {
+            PlayerStats.ConsumeResource(resouce.ResourceType, resouce.Quantity);
+        }
+
         var craftingCard = Instantiate(craftingCardPrefab, cardHolder);
         craftingCard.SetUp(card.Item);
         PlaceInQueue(craftingCard);
@@ -83,6 +97,11 @@ public class CraftController : MonoBehaviour
         Destroy(card.gameObject);
     }
 
+
+    public ResourceTypePropertys GetResourceProperty(Resource.Type type)
+    {
+        return resourcePropertys.Find(resource => resource.Type == type);
+    }
 
 
     void LoadAssets(TreeNode parent)

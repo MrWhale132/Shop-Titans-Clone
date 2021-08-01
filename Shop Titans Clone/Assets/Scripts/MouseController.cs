@@ -140,11 +140,11 @@ public class MouseController : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (leftBtnDown && Physics.Raycast(ray, out hitInfo, 300f))
         {
-            clickedMoveable = hitInfo.collider.GetComponent<MoveableObject>();
+            clickedMoveable = hitInfo.collider.GetComponent<Fitment>();
         }
         if (leftBtnUp && Physics.Raycast(ray, out hitInfo, 300f, moveableMask))
         {
-            if (clickedMoveable == hitInfo.collider.GetComponent<MoveableObject>())
+            if (clickedMoveable == hitInfo.collider.GetComponent<Fitment>())
             {
                 if (!FurnitureMoveingMenu.Moveing &&
                     !ConstructionMenu.Constructing)
@@ -152,7 +152,7 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-    MoveableObject clickedMoveable;
+    Fitment clickedMoveable;
     RaycastHit hitInfo;
 
 
@@ -182,7 +182,7 @@ public class MouseController : MonoBehaviour
         {
             zooming = false;
             rotating = false;
-            // some jittering occur, probably cause of diff.x
+            // some jittering occur, probably beacause the rapidly changing values of diff.x
             Vector3 diff = Input.mousePosition - prevMousePos;
             if (diff.x == 0)
                 return;

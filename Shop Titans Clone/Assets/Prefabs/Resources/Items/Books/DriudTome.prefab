@@ -49,7 +49,9 @@ MonoBehaviour:
   itemName: Druid Tome
   value: 10
   craftingTime: 2
-  recquiredMaterials: []
+  recquiredMaterials:
+  - type: 2
+    quantity: 5
   preferedOffset: {x: 0, y: 0.04, z: 0}
   preferedRotOnFurn: {x: 0, y: -118.3, z: 0}
   renderers:

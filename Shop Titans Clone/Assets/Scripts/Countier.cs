@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Countier : MoveableObject
+public class Countier : Fitment
 {
     static Countier instance;
 

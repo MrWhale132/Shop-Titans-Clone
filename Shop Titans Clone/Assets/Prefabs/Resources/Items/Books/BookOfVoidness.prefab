@@ -128,7 +128,9 @@ MonoBehaviour:
   itemName: Book Of Voidness
   value: 30
   craftingTime: 4
-  recquiredMaterials: []
+  recquiredMaterials:
+  - type: 2
+    quantity: 10
   preferedOffset: {x: 0, y: 0.14, z: 0}
   preferedRotOnFurn: {x: 0, y: 0, z: 0}
   renderers:

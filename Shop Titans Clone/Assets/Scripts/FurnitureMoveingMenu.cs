@@ -10,9 +10,9 @@ public class FurnitureMoveingMenu : MonoBehaviour, IStartable
 
     public static bool Moveing => instance.gameObject.activeInHierarchy;
 
-    public static MoveableObject ObjectToMove {
-        get => BuildController.Instance.ToMoveFurn;
-        set => BuildController.Instance.ToMoveFurn = value;
+    public static Fitment ObjectToMove {
+        get => BuildController.Instance.ToMoveFitment;
+        set => BuildController.Instance.ToMoveFitment = value;
     }
 
 
@@ -38,7 +38,7 @@ public class FurnitureMoveingMenu : MonoBehaviour, IStartable
         gameObject.SetActive(true);
         animator.SetTrigger("Enter");
         GridController.SetActiveBuildGrid(true);
-        MouseController.Instace.AddControl(MouseController.UsageMode.DragLeft, BuildController.Instance.DragFurn);
+        MouseController.Instace.AddControl(MouseController.UsageMode.DragLeft, BuildController.Instance.DragFitment);
     }
 
     public void Back()
@@ -47,7 +47,7 @@ public class FurnitureMoveingMenu : MonoBehaviour, IStartable
         PrimaryUI.Instance.Enter();
         GridController.SetActiveBuildGrid(false);   
         ObjectToMove?.ValidatePosition();
-        MouseController.Instace.RemoveControl(MouseController.UsageMode.DragLeft, BuildController.Instance.DragFurn);
+        MouseController.Instace.RemoveControl(MouseController.UsageMode.DragLeft, BuildController.Instance.DragFitment);
     }
 
     void OnExitAnimFinished()

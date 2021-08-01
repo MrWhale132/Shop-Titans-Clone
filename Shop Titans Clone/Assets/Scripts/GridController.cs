@@ -109,7 +109,7 @@ public class GridController : MonoBehaviour
             }
         }
         stopwatch.Stop();
-        Debug.Log(stopwatch.ElapsedMilliseconds);
+        //Debug.Log(stopwatch.ElapsedMilliseconds);
     }
 
 

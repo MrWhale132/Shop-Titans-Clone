@@ -29,17 +29,17 @@ public class ConstructionMenu : MonoBehaviour, IStartable
 
     public void BuildFurniture()
     {
-        if (PlayerStats.GoldAmount < buildC.ToBuildFurn.BuildCost)
+        if (PlayerStats.GoldAmount < buildC.ToBuildFitment.BuildCost)
         {
             MessageDisplayer.DisplayMessage("You do not have enough gold to build this furniture.");
             return;
         }
-        if (buildC.ToBuildFurn.HasValidPosition() == false)
+        if (buildC.ToBuildFitment.HasValidPosition() == false)
         {
             MessageDisplayer.DisplayMessage("The position of your furniture is invalid.");
             return;
         }
-        PlayerStats.TakeGold(buildC.ToBuildFurn.BuildCost);
+        PlayerStats.TakeGold(buildC.ToBuildFitment.BuildCost);
         buildC.BuildMoveable();
         ExitToPrimaryUI();
     }
@@ -52,7 +52,7 @@ public class ConstructionMenu : MonoBehaviour, IStartable
 
     public void RotateFurniture(int degres)
     {
-        buildC.ToMoveFurn.Rotate(degres);
+        buildC.ToMoveFitment.Rotate(degres);
     }
 
 

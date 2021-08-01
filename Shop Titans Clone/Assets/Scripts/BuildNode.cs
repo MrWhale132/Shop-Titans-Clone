@@ -8,9 +8,9 @@ public class BuildNode
     public enum States { Empty, Occupied, Valid, Invalid }
 
     Image image;
-    List<MoveableObject> occupiers;
+    List<Fitment> occupiers;
 
-    public MoveableObject Owner => occupiers.Count > 0 ? occupiers[0] : null;
+    public Fitment Owner => occupiers.Count > 0 ? occupiers[0] : null;
     public Vector3 Position => image.transform.position;
     public bool Crowded => occupiers.Count > 1;
 
@@ -18,11 +18,11 @@ public class BuildNode
     public BuildNode(Image image)
     {
         this.image = image;
-        occupiers = new List<MoveableObject>();
+        occupiers = new List<Fitment>();
     }
 
 
-    public void AddOccupier(MoveableObject moveable)
+    public void AddOccupier(Fitment moveable)
     {
         if (occupiers.Contains(moveable))
         {
@@ -31,7 +31,7 @@ public class BuildNode
         else occupiers.Add(moveable);
     }
 
-    public void RemoveOccupier(MoveableObject moveable)
+    public void RemoveOccupier(Fitment moveable)
     {
         if (occupiers.Remove(moveable) == false)
         {

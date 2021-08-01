@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class Furniture : MoveableObject
+public class Furniture : Fitment
 {
     public enum Types { Table, Rack, Shelf, Manique }
 
@@ -89,10 +89,6 @@ public class Furniture : MoveableObject
     public override void OnClicked()
     {
         base.OnClicked();
-    }
-
-    protected override List<GridNode> GetVisitableGridNodes()
-    {
-        return base.GetVisitableGridNodes();
+        // call here FurnitorEditor.Instance....
     }
 }

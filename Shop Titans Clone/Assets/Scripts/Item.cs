@@ -14,7 +14,7 @@ public class Item : MonoBehaviour
     [SerializeField]
     int craftingTime;
     [SerializeField]
-    Material[] recquiredMaterials;
+    Resource[] recquiredMaterials;
     [SerializeField]
     Vector3 preferedOffset;
     [SerializeField]
@@ -30,7 +30,7 @@ public class Item : MonoBehaviour
     public int Value => value;
     public int CraftTime => craftingTime;
     public Furniture.Types PreferedFurnType => preferedFurnType;
-    public Material[] RecquiredMaterials => recquiredMaterials;
+    public Resource[] RequiredResources => recquiredMaterials;
 
 
 

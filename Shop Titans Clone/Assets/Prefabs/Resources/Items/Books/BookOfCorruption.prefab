@@ -49,7 +49,9 @@ MonoBehaviour:
   itemName: Book Of Corruption
   value: 20
   craftingTime: 3
-  recquiredMaterials: []
+  recquiredMaterials:
+  - type: 2
+    quantity: 8
   preferedOffset: {x: 0, y: 0.112, z: 0}
   preferedRotOnFurn: {x: 0, y: 11, z: 0}
   renderers:
